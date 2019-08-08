@@ -4,4 +4,5 @@ from .controller import question
 urlpatterns = [
     path('getQuestion', question.getQuestion, name='getQuestion'),
     path('checkAnswer', question.checkAnswer, name='checkAnswer'),
+    path('leaderboard', question.leaderboard, name='leaderboard'),
 ]
