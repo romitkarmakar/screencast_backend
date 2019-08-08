@@ -5,7 +5,10 @@ from quiz.models.Question import Question
 
 def getQuestion(request):
     email = request.GET.get('email') 
-    user = Player.objects.get(email=email)
+    try:
+        user = Player.objects.get(email=email)
+    except:
+        user = Player.objects.create(email=email)     
     q_num = request.GET.get('q_number')
     response = []
     question = Question.objects.get(id=q_num)
