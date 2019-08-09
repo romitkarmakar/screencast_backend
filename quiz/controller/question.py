@@ -2,6 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from quiz.models.Level import Level
 from quiz.models.Player import Player
 from quiz.models.Question import Question
+import datetime
 
 def getQuestion(request):
     email = request.GET.get('email') 
@@ -28,6 +29,7 @@ def checkAnswer(request):
     answer = request.GET.get('answer')
     if question.answer_text == answer:
         user.score = user.score + 10
+        user.submit_time = datetime.datetime.now()
         user.save()
         return JsonResponse({
             'isTrue': 1
@@ -38,18 +40,18 @@ def checkAnswer(request):
     })
 
 def leaderboard(request):
-    p = Player.objects.order_by('-score')
-    cur_rank = 1
+    p = Player.objects.order_by('-score','submit_time')
+    current_rank = 1
     players_array = []
     for player in p:
-        player.rank = cur_rank
+        player.rank = current_rank
         players_array.append({
             'name':player.name,
             'rank':player.rank,
             'email':'',
             'score':player.score,
         })
-        cur_rank += 1
+        current_rank += 1
 
     return JsonResponse(players_array,safe=False)
 
