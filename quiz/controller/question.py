@@ -2,7 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from quiz.models.Level import Level
 from quiz.models.Player import Player
 from quiz.models.Question import Question
-import datetime
+import datetime, json
 
 def getQuestion(request):
     email = request.GET.get('email') 
@@ -14,10 +14,14 @@ def getQuestion(request):
     q_num = (score/10) + 1;
     response = []
     question = Question.objects.get(id=q_num)
+    img_url = request.build_absolute_uri(question.image.url)
+    audio_url = request.build_absolute_uri(question.audio.url)
     return JsonResponse ({
         'question':question.question_text,
         'hint':question.answer_text,
         'score':score,
+        'image':img_url,
+        'audio':audio_url,
     })
 
 def checkAnswer(request):
