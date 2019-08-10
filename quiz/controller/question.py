@@ -4,16 +4,41 @@ from quiz.models.Player import Player
 from quiz.models.Question import Question
 import datetime, json
 
+def register(request):
+    email = request.GET.get('email')
+    name = request.GET.get('name')
+    try:
+        user = Player.objects.get(email=email)
+        return JsonResponse({
+            'status':402,
+            'message':"Email Already Registered!!" ,
+        })
+    except:    
+        user = Player.objects.create(email=email)
+        user.name = name
+        user.save()
+        return JsonResponse({
+            'status':"Email Registered Succesfully!!"
+        })
+
 def getQuestion(request):
     email = request.GET.get('email') 
     try:
         user = Player.objects.get(email=email)
     except:
-        user = Player.objects.create(email=email)
+        return JsonResponse({
+            'status':404,
+            'message':"Email not Registered" ,
+        })
     score = user.score         
     q_num = (score/10) + 1;
-    response = []
-    question = Question.objects.get(id=q_num)
+    try:
+        question = Question.objects.get(id=q_num)
+    except:
+        return JsonResponse({
+            'status':400,
+            'message':"finished" ,
+        })     
     img_url = request.build_absolute_uri(question.image.url)
     audio_url = request.build_absolute_uri(question.audio.url)
     return JsonResponse ({
@@ -56,6 +81,5 @@ def leaderboard(request):
             'score':player.score,
         })
         current_rank += 1
-
     return JsonResponse(players_array,safe=False)
 
