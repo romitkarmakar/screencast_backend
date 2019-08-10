@@ -25,7 +25,7 @@ SECRET_KEY = '3e%hy!5ll_=zc10-u_23p6q_eklf-0ic5%2u3@thpo#kn_2(e4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['screecast-dev.us-west-2.elasticbeanstalk.com/', 'api.screencast.trennds.com']
+ALLOWED_HOSTS = ['screecast-dev.us-west-2.elasticbeanstalk.com/', 'api.screencast.trennds.com', 'screencast-env.nmttpbfpn4.us-west-2.elasticbeanstalk.com']
 
 
 # Application definition
