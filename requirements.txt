@@ -3,11 +3,7 @@ django-allauth==0.39.1
 django-cors-headers==3.0.2
 djangorestframework==3.9.1
 oauth==1.0.1
-<<<<<<< HEAD
 oauthlib==3.1.0
-=======
-oauthlib==3.0.0
->>>>>>> 1b2c9589d938615f06a194ef7bb865e388d2b910
 Pillow==5.2.0
 python-decouple==3.1
 python-social-auth==0.3.6

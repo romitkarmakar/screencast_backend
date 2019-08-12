@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
     "sqltools.connections": [
         {
             "database": ".\\db.sqlite3",
@@ -7,7 +6,4 @@
             "name": "screencast"
         }
     ]
-=======
-    "python.pythonPath": "c:\\Users\\user\\OneDrive\\screencast_backend\\env\\Scripts\\python.exe"
->>>>>>> 1b2c9589d938615f06a194ef7bb865e388d2b910
 }
