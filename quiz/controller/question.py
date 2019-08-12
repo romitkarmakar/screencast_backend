@@ -19,12 +19,14 @@ def getQuestion(request):
     email = request.GET.get('email') 
     if verifyUser(email):
         user = Player.objects.get(email=email)
-        score = user.score         
+        score_array = user.score.split(",")
+        score = int(score_array[currentLevel()])       
         q_num = (score/10) + 1
 
         level = Level.objects.get(level_number=currentLevel())
-        question = Question.objects.get(id=q_num)
-    
+        questions = Question.objects.filter(level=level)
+        question = [q for q, index in enumerate(questions) if index == q_num]
+
         img_url = request.build_absolute_uri(question.image.url)
         audio_url = request.build_absolute_uri(question.audio.url)
         return JsonResponse ({
@@ -34,16 +36,27 @@ def getQuestion(request):
             'image':img_url,
             'audio':audio_url,
         })
+    else:
+        return JsonResponse({
+            'status':404,
+            'message':"User Not Registered"
+    })    
 
 def checkAnswer(request):
     email = request.GET.get('email')
     user = Player.objects.get(email=email)
-    score = user.score
+    score_array = user.score.split(",")
+    score = int(score_array[currentLevel()])        
     q_num = (score/10) + 1
-    question = Question.objects.get(id=q_num)
+    level = Level.objects.get(level_number=currentLevel())
+    questions = Question.objects.filter(level=level)
+    question = [q for q, index in enumerate(questions) if index == q_num ]
+
     answer = request.GET.get('answer')
+    answer.lower()
+    answer.strip()
     if question.answer_text == answer:
-        user.score = user.score + 10
+        score_array[currentLevel()] = str(int(score_array[currentLevel()])+10)
         user.submit_time = datetime.datetime.now()
         user.save()
         return JsonResponse({
@@ -60,11 +73,14 @@ def leaderboard(request):
     players_array = []
     for player in p:
         player.rank = current_rank
+        score = 0
+        for index in player.score:
+            score+=int(index)
         players_array.append({
             'name':player.name,
             'rank':player.rank,
-            'email':'',
-            'score':player.score,
+            'score':score,
+            'image':player.image,
         })
         current_rank += 1
     return JsonResponse(players_array,safe=False)
