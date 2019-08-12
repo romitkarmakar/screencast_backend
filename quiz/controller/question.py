@@ -3,57 +3,43 @@ from quiz.models.Level import Level
 from quiz.models.Player import Player
 from quiz.models.Question import Question
 import datetime, json
+from quiz.controller.authentication import verifyUser
+from django.utils import timezone
+  
+def currentLevel():
+    now = timezone.now()
+    levels = Level.objects.all()
+    for level in levels:
+        if now >= level.start_time and now <= level.end_time:
+            print(level.level_number)
+            return level.level_number
 
-def register(request):
-    email = request.GET.get('email')
-    name = request.GET.get('name')
-    try:
-        user = Player.objects.get(email=email)
-        return JsonResponse({
-            'status':402,
-            'message':"Email Already Registered!!" ,
-        })
-    except:    
-        user = Player.objects.create(email=email)
-        user.name = name
-        user.save()
-        return JsonResponse({
-            'status':"Email Registered Succesfully!!"
-        })
 
 def getQuestion(request):
     email = request.GET.get('email') 
-    try:
+    if verifyUser(email):
         user = Player.objects.get(email=email)
-    except:
-        return JsonResponse({
-            'status':404,
-            'message':"Email not Registered" ,
-        })
-    score = user.score         
-    q_num = (score/10) + 1;
-    try:
+        score = user.score         
+        q_num = (score/10) + 1
+
+        level = Level.objects.get(level_number=currentLevel())
         question = Question.objects.get(id=q_num)
-    except:
-        return JsonResponse({
-            'status':400,
-            'message':"finished" ,
-        })     
-    img_url = request.build_absolute_uri(question.image.url)
-    audio_url = request.build_absolute_uri(question.audio.url)
-    return JsonResponse ({
-        'question':question.question_text,
-        'hint':question.answer_text,
-        'score':score,
-        'image':img_url,
-        'audio':audio_url,
-    })
+    
+        img_url = request.build_absolute_uri(question.image.url)
+        audio_url = request.build_absolute_uri(question.audio.url)
+        return JsonResponse ({
+            'question':question.question_text,
+            'hint':question.answer_text,
+            'score':score,
+            'image':img_url,
+            'audio':audio_url,
+        })
 
 def checkAnswer(request):
     email = request.GET.get('email')
     user = Player.objects.get(email=email)
     score = user.score
-    q_num = (score/10) + 1;
+    q_num = (score/10) + 1
     question = Question.objects.get(id=q_num)
     answer = request.GET.get('answer')
     if question.answer_text == answer:

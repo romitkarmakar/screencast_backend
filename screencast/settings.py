@@ -25,7 +25,7 @@ SECRET_KEY = '3e%hy!5ll_=zc10-u_23p6q_eklf-0ic5%2u3@thpo#kn_2(e4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['screecast-dev.us-west-2.elasticbeanstalk.com/', 'api.screencast.trennds.com', 'screencast-env.nmttpbfpn4.us-west-2.elasticbeanstalk.com']
 
 
 # Application definition
@@ -39,9 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework.authtoken',
-    'social_django',
     'corsheaders',
-    'rest_framework',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -139,47 +138,30 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:5500',
+    'http://screencast.trennds.com'
 )
 CORS_ORIGIN_REGEX_WHITELIST = (
     'http://localhost:5500',
+    'http://screencast.trennds.com'
 )
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-}
-
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
-for key in ['GOOGLE_OAUTH2_KEY',
-            'GOOGLE_OAUTH2_SECRET',
-            'FACEBOOK_KEY',
-            'FACEBOOK_SECRET']:
-    exec("SOCIAL_AUTH_{key} = os.environ.get('{key}', '')".format(key=key))
+# AWS_ACCESS_KEY_ID = 'AKIAXIBYJKTXQYXVYROA'
+# AWS_SECRET_ACCESS_KEY = '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'
+# AWS_STORAGE_BUCKET_NAME = 'screencast-assets'
+# AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+# AWS_S3_OBJECT_PARAMETERS = {
+#     'CacheControl': 'max-age=86400',
+# }
+# AWS_LOCATION = 'static'
 
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
+# # STATICFILES_DIRS = [
+# #     os.path.join(BASE_DIR, '/static'),
+# # ]
+# STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
-
-SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
-
-SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.user.get_username',
-    'social_core.pipeline.social_auth.associate_by_email',
-    'social_core.pipeline.user.create_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
-)
+# DEFAULT_FILE_STORAGE = 'screencast.storage_backends.MediaStorage'
