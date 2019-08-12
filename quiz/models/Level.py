@@ -6,4 +6,4 @@ class Level(models.Model):
     end_time = models.DateTimeField(blank=True)
 
     def __str__(self):
-        return self.level_number
+        return str(self.level_number)

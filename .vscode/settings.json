@@ -1,0 +1,9 @@
+{
+    "sqltools.connections": [
+        {
+            "database": ".\\db.sqlite3",
+            "dialect": "SQLite",
+            "name": "screencast"
+        }
+    ]
+}
