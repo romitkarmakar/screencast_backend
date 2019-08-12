@@ -39,12 +39,12 @@ def verifyFacebookToken(token):
 
 
 def register(request):
-    if request.GET.get('type') == 1:
+    if request.GET.get('type') == '1':
         res = verifyGoogleToken(request.GET.get('id_token'))
     else:
-        res = verifyFacebookToken()
+        res = verifyFacebookToken(request.GET.get('id_token'))
 
-    if verifyUser(res['email']):
+    if verifyUser(res['email']) == 0:
         player = Player(name=res['name'],
                         email=res['email'], image=res['image'])
         player.save()
