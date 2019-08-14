@@ -95,7 +95,7 @@ def leaderboard(request):
         players_array.append({
             'name': player.name,
             'rank': player.rank,
-            'score': score,
+            'score': player.total_score,
             'image': player.image,
         })
         current_rank += 1
