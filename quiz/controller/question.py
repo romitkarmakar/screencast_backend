@@ -16,6 +16,9 @@ def currentLevel():
             print(level.level_number)
             return level.level_number
 
+def getLevel(request):
+    return HttpResponse(currentLevel())
+
 
 def getQuestion(request):
     currLevel = currentLevel()
@@ -24,11 +27,12 @@ def getQuestion(request):
     if verifyUser(email):
         user = Player.objects.get(email=email)
         score_array = user.score.split(",")
-        score = int(score_array[currLevel])
+        score = int(score_array[currLevel-1])
         q_num = int((score/10))
 
         level = Level.objects.get(level_number=currLevel)
-        questions = Question.objects.filter(level=level)
+        questions = Question.objects.filter(level=level).order_by('pk')
+        # questions.reverse()
 
         for index, q in enumerate(questions):
             if q_num == index:
@@ -56,16 +60,16 @@ def checkAnswer(request):
     user = Player.objects.get(email=email)
     score_array = user.score.split(",")
     print(score_array)
-    score = int(score_array[currentLevel()])
+    score = int(score_array[currentLevel()-1])
     q_num = int((score/10))
     level = Level.objects.get(level_number=currLevel)
-    questions = Question.objects.filter(level=level)
+    questions = Question.objects.filter(level=level).order_by('pk')
     for index, q in enumerate(questions):
         if q_num == index:
             question = questions[index]
             answer = request.GET.get('answer')
-            answer.lower()
-            answer.strip()
+            answer = answer.lower()
+            answer = answer.strip()
             if question.answer_text == answer:
                 score_array[currLevel-1] = str(int(score_array[currLevel-1]) + 10)
                 user.submit_time = timezone.now()
