@@ -74,6 +74,7 @@ def checkAnswer(request):
                 score_array[currLevel-1] = str(int(score_array[currLevel-1]) + 10)
                 user.submit_time = timezone.now()
                 user.score = ",".join(score_array)
+                user.total_score += 10
                 print(user.score)
                 user.save()
                 return JsonResponse({
@@ -86,15 +87,11 @@ def checkAnswer(request):
 
 
 def leaderboard(request):
-    p = Player.objects.order_by('-score', 'submit_time')
+    p = Player.objects.order_by('-total_score', 'submit_time')
     current_rank = 1
     players_array = []
     for player in p:
         player.rank = current_rank
-        score = 0
-        score_array = player.score.split(",")
-        for index in score_array:
-            score += int(index)
         players_array.append({
             'name': player.name,
             'rank': player.rank,
