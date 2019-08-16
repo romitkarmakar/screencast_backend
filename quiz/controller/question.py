@@ -70,12 +70,11 @@ def checkAnswer(request):
             answer = request.GET.get('answer')
             answer = answer.lower()
             answer = answer.strip()
-            if question.answer_text == answer:
+            if question.checkAnswer(answer):
                 score_array[currLevel-1] = str(int(score_array[currLevel-1]) + 10)
                 user.submit_time = timezone.now()
                 user.score = ",".join(score_array)
                 user.total_score += 10
-                print(user.score)
                 user.save()
                 return JsonResponse({
                     'isTrue': 1

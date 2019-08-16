@@ -8,6 +8,7 @@ urlpatterns = [
     path('checkAnswer', question.checkAnswer, name='checkAnswer'),
     path('leaderboard', question.leaderboard, name='leaderboard'),
     path('register', authentication.register, name='register'),
+    path('currLevel', question.getLevel, name='level'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
