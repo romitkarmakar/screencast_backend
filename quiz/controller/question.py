@@ -95,6 +95,7 @@ def checkAnswer(request):
                 score_array[currLevel - 1] = str(int(score_array[currLevel - 1]) + 10)
                 user.submit_time = timezone.now()
                 user.score = ",".join(score_array)
+                user.total_score += 10
                 user.save()
                 return JsonResponse({"isTrue": 1})
             else:
