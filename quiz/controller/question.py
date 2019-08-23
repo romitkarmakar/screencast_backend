@@ -26,7 +26,8 @@ def nextLevel():
         if now <= level.start_time:
             value = str(level.start_time - now)
             valueArr = value.split(".")
-            return [valueArr[0], level.level_number]
+            valueArr1 = valueArr[0].split(":")
+            return ["{} hour and {} minutes".format(valueArr1[0], valueArr1[1]), level.level_number]
 
 
 def getLevel(request):
@@ -43,14 +44,23 @@ def getQuestion(request):
     if verifyUser(email):
         user = Player.objects.get(email=email)
         score_array = user.score.split(",")
-        score = int(score_array[currLevel - 1])
-        q_num = int((score / 10))
+        if currLevel is not None:
+            score = int(score_array[currLevel - 1])
 
+        else:
+            return JsonResponse({
+                    "status": 500,
+                    "message": "No questions"
+                })
+
+        q_num = int((score / 10))
+        print(q_num)
         level = Level.objects.get(level_number=currLevel)
         questions = Question.objects.filter(level=level).order_by("pk")
-        # questions.reverse()
+        print(questions)
 
         for index, q in enumerate(questions):
+            print(index)
             if q_num == index:
                 question = questions[index]
                 img_url = request.build_absolute_uri(question.image.url)
@@ -65,8 +75,7 @@ def getQuestion(request):
                         "audio": audio_url,
                     }
                 )
-            else:
-                return JsonResponse({
+        return JsonResponse({
                     "status": 500,
                     "message": "No questions"
                 })

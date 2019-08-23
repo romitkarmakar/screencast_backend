@@ -7,3 +7,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # url(r'^api-auth/', include('rest_framework.urls')) #Django REST framework browsable api(Opt.)
 ]
+
+
