@@ -7,7 +7,7 @@ from quiz.models.Player import Player
 
 
 def verifyGoogleToken(token):
-    CLIENT_ID = '89459250735-j8fpvf9elrl0e9vrj4s07rheku66t5r3.apps.googleusercontent.com'
+    CLIENT_ID = '423663708664-jubbbir6i2d16pd5948nvn52tu5fun32.apps.googleusercontent.com'
     idinfo = id_token.verify_oauth2_token(
         token, requests.Request(), CLIENT_ID)
 
