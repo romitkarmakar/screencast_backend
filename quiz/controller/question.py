@@ -6,7 +6,7 @@ import datetime
 import json
 from quiz.controller.authentication import verifyUser
 from django.utils import timezone
-
+import urllib
 
 def currentLevel():
     now = timezone.now()
@@ -98,6 +98,8 @@ def checkAnswer(request):
         if q_num == index:
             question = questions[index]
             answer = request.GET.get("answer")
+            print(answer)
+            answer = urllib.parse.unquote(answer)
             answer = answer.lower()
             answer = answer.strip()
             if question.checkAnswer(answer):
