@@ -69,7 +69,7 @@ def getQuestion(request):
                     {
                         "status": 200,
                         "question": question.question_text,
-                        "hint": question.answer_text,
+                        "hint": question.hint,
                         "score": score,
                         "image": img_url,
                         "audio": audio_url,
