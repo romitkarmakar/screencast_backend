@@ -1,6 +1,5 @@
 */__pycache__/
 quiz/*/__pycache__/
-db.sqlite3
 /media
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
